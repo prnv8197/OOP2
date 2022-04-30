@@ -40,11 +40,19 @@ class BrokerConnection:
             return f"Broker connection successful for username: {self.username}"
         else:
             return f"Some error occured, try again."
+        
+    def placetrades(self):
+        query = {'Username': self.username, 'Password': self.password}
+        response = requests.get('http://api.open-notify.org/astros.json', query)
+        if(response.status_code == 200):
+            return f"Trades placed for username: {self.username}"
+        else:
+            return f"Some error occured, try again."
 
 
 class RunStrat:
     def run(self):
-        return run()
+        run()
         
         
 print("Starting System")  
@@ -54,7 +62,7 @@ print("Please enter password")
 password = input()
 
 # Creating object for establishing connection
-
+clearConsole()
 StartConnection = BrokerConnection(username, password)
 if(StartConnection.validation(username,password)):
     print(StartConnection.createconnection())
@@ -67,4 +75,11 @@ else:
     print("\n","Invalid credentials, please try again")
 
 
+print("Do you want to place trades?(Y/N)")
+trade = input()
+if(trade=='Y'):
+    PlaceTrades = BrokerConnection(username, password)
+    print(StartConnection.placetrades())
+else:
+    print("Exiting sytem")
 
